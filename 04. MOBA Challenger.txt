@@ -1,0 +1,95 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedHashMap;
+
+public class exam1 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+
+        LinkedHashMap<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<>();
+
+        String input = bf.readLine();
+
+        while (!input.equals("Season end")) {
+            if (input.contains(" -> ")) {
+                String[] tokens = input.split(" -> ");
+                String name = tokens[0];
+                String possition = tokens[1];
+                int skill = Integer.parseInt(tokens[2]);
+                if (!map.containsKey(name)) {
+                    map.put(name, new LinkedHashMap<>());
+                    map.get(name).put(possition, skill);
+                } else if (map.containsKey(name)) {
+                    if (!map.get(name).containsKey(possition)) {
+                        map.get(name).put(possition, skill);
+                    } 
+                }
+            } else if (input.contains(" vs ")) {
+                String[] tokens = input.split(" vs ");
+                String firstName = tokens[0];
+                String secondName = tokens[1];
+
+                if (map.containsKey(firstName) && map.containsKey(secondName)) {
+                    int skils1 = 0;
+                    int skils2 = 0;
+                    String possition = "";
+
+                    for (String a : map.keySet()) {
+                        if (a.equals(firstName)) {
+                            for (String b : map.get(a).keySet()) {
+                                if (map.get(secondName).containsKey(b)) {
+                                    possition = b;
+                                    skils1 = map.get(a).get(b);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    for (String a : map.keySet()) {
+                        if (a.equals(secondName)) {
+                            for (String b : map.get(a).keySet()) {
+                                if (b.equals(possition))
+                                    skils2 = map.get(a).get(b);
+                            }
+                        }
+                    }
+
+                    if (skils1 > skils2) {
+                        map.remove(secondName);
+                    } else if (skils2 > skils1) {
+                        map.remove(firstName);
+                    }
+                }
+            }
+
+            input = bf.readLine();
+        }
+
+        map.entrySet()
+                .stream()
+                .sorted((a1,a2)-> Integer.compare(a2.getValue().size(),a1.getValue().size()))
+                .sorted((d1,d2)->Integer.compare(d2.getValue()
+                        .values()
+                        .stream()
+                        .mapToInt(Integer::intValue)
+                        .sum(),
+                        d1.getValue()
+                        .values()
+                        .stream()
+                        .mapToInt(Integer::intValue)
+                        .sum()))
+                .forEach(a->{
+                    System.out.print(a.getKey() + ": ");
+                    System.out.println(a.getValue().values().stream().mapToInt(Integer::intValue).sum() + " skill");
+                    LinkedHashMap<String,Integer> map1 = a.getValue();
+                    map1.entrySet()
+                            .stream()
+                            .sorted((b1,b2)->Integer.compare(b2.getValue(),b1.getValue()))
+                            .forEach(b->{
+                                System.out.println("- " + b.getKey() + " <::> " + b.getValue());
+
+                            });
+                });
+    }
+}

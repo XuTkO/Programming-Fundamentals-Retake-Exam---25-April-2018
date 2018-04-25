@@ -1,0 +1,76 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+public class exam {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+
+        String input = bf.readLine();
+        List<String> account = new ArrayList<>();
+
+        while (!input.equals("Play!")){
+            if (input.contains("Install")){
+                String[] tokens = input.split(" ");
+                String command = tokens[0];
+                String game = "";
+                for (int a = 1; a < tokens.length; a++) {
+                game+=tokens[a];
+                }
+                if (!account.contains(game)) {
+                    account.add(game);
+                }
+            } else if(input.contains("Uninstall")){
+                String[] tokens = input.split(" ");
+                String command = tokens[0];
+                String game = "";
+                for (int a = 1; a < tokens.length; a++) {
+                    game+=tokens[a];
+                }
+                if (account.contains(game)){
+                    account.remove(game);
+                }
+            } else if (input.contains("Update")){
+                String[] tokens = input.split(" ");
+                String command = tokens[0];
+                String game = "";
+                for (int a = 1; a < tokens.length; a++) {
+                    game+=tokens[a];
+                }
+                if (account.contains(game)){
+                    account.remove(game);
+                    account.add(game);
+                }
+            } else if (input.contains("Expansion")){
+                String[] tokens = input.split(" ");
+                String command = tokens[0];
+                String[] gameExpansion = tokens[1].split("-");
+                String game = gameExpansion[0];
+                String expansion = gameExpansion[1];
+                if (account.contains(game)){
+                    int index = 0;
+                    for (int a = 0; a < account.size(); a++) {
+                        if (account.get(a).equals(game)){
+                            index = a;
+                        }
+                    }
+                    account.add(index+1,game+":"+expansion);
+                }
+            } else {
+                String[] tokens = input.split(" ");
+
+                for (int a = 0; a < tokens.length; a++) {
+                    account.add(tokens[a]);
+                }
+            }
+            input = bf.readLine();
+        }
+
+        for (int a = 0; a < account.size(); a++) {
+            System.out.print(account.get(a) + " ");
+
+        }
+    }
+}

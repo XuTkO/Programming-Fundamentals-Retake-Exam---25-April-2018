@@ -1,0 +1,43 @@
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+public class exam {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+
+        String input = bf.readLine();
+        String numRow = "";
+
+        while (!input.equals("Visual Studio crash")) {
+            numRow += input + " ";
+            input = bf.readLine();
+        }
+
+        List<Integer> numbers = new ArrayList<>();
+        String[] nums = numRow.split("\\s+");
+
+        for (int a = 0; a < nums.length; a++) {
+            numbers.add(Integer.parseInt(nums[a]));
+        }
+        for (int a = 0; a < numbers.size(); a++) {
+            if (numbers.get(a) == 32656 && numbers.get(a + 1) == 19759
+                    && numbers.get(a + 2) == 32763 && numbers.get(a + 3) == 0) {
+                for (int b = a + 4; b < numbers.size(); b++) {
+                    int loopLenght = numbers.get(b);
+                    for (int c = b + 1; c <= b + 1 + loopLenght; c++) {
+                        int numb = numbers.get(c);
+                        char symbol = (char) numb;
+                        System.out.print(symbol);
+                        a = c;
+                    }
+                    System.out.println();
+                    break;
+                }
+            }
+        }
+    }
+}
